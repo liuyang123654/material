@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.material.mapper.DurablePerformanceMapper">
+    
+    <resultMap type="DurablePerformance" id="DurablePerformanceResult">
+        <result property="trademark"    column="trademark"    />
+        <result property="heatTreatmentSystem"    column="heat_treatment_system"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="stress"    column="stress"    />
+        <result property="τ_min"    column="τ_min"    />
+        <result property="τ_max"    column="τ_max"    />
+        <result property="elongation"    column="elongation"    />
+        <result property="sectionShrinkage"    column="section_shrinkage"    />
+    </resultMap>
+
+    <sql id="selectDurablePerformanceVo">
+        select trademark, heat_treatment_system, temperature, stress, τ_min, τ_max, elongation, section_shrinkage from durable_performance
+    </sql>
+
+    <select id="selectDurablePerformanceList" parameterType="DurablePerformance" resultMap="DurablePerformanceResult">
+        <include refid="selectDurablePerformanceVo"/>
+        <where>  
+            <if test="trademark != null  and trademark != ''"> and trademark = #{trademark}</if>
+            <if test="heatTreatmentSystem != null  and heatTreatmentSystem != ''"> and heat_treatment_system = #{heatTreatmentSystem}</if>
+            <if test="temperature != null "> and temperature = #{temperature}</if>
+            <if test="stress != null "> and stress = #{stress}</if>
+            <if test="τ_min != null "> and τ_min = #{τ_min}</if>
+            <if test="τ_max != null "> and τ_max = #{τ_max}</if>
+            <if test="elongation != null "> and elongation = #{elongation}</if>
+            <if test="sectionShrinkage != null "> and section_shrinkage = #{sectionShrinkage}</if>
+        </where>
+    </select>
+    
+    <select id="selectDurablePerformanceByTrademark" parameterType="String" resultMap="DurablePerformanceResult">
+        <include refid="selectDurablePerformanceVo"/>
+        where trademark = #{trademark}
+    </select>
+        
+    <insert id="insertDurablePerformance" parameterType="DurablePerformance">
+        insert into durable_performance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="trademark != null">trademark,</if>
+            <if test="heatTreatmentSystem != null">heat_treatment_system,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="stress != null">stress,</if>
+            <if test="τ_min != null">τ_min,</if>
+            <if test="τ_max != null">τ_max,</if>
+            <if test="elongation != null">elongation,</if>
+            <if test="sectionShrinkage != null">section_shrinkage,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="trademark != null">#{trademark},</if>
+            <if test="heatTreatmentSystem != null">#{heatTreatmentSystem},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="stress != null">#{stress},</if>
+            <if test="τ_min != null">#{τ_min},</if>
+            <if test="τ_max != null">#{τ_max},</if>
+            <if test="elongation != null">#{elongation},</if>
+            <if test="sectionShrinkage != null">#{sectionShrinkage},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDurablePerformance" parameterType="DurablePerformance">
+        update durable_performance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="heatTreatmentSystem != null">heat_treatment_system = #{heatTreatmentSystem},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="stress != null">stress = #{stress},</if>
+            <if test="τ_min != null">τ_min = #{τ_min},</if>
+            <if test="τ_max != null">τ_max = #{τ_max},</if>
+            <if test="elongation != null">elongation = #{elongation},</if>
+            <if test="sectionShrinkage != null">section_shrinkage = #{sectionShrinkage},</if>
+        </trim>
+        where trademark = #{trademark}
+    </update>
+
+    <delete id="deleteDurablePerformanceByTrademark" parameterType="String">
+        delete from durable_performance where trademark = #{trademark}
+    </delete>
+
+    <delete id="deleteDurablePerformanceByTrademarks" parameterType="String">
+        delete from durable_performance where trademark in 
+        <foreach item="trademark" collection="array" open="(" separator="," close=")">
+            #{trademark}
+        </foreach>
+    </delete>
+
+    <!--@Author 刘洋-->
+    <select id="select_trademark" resultType="String">
+        select distinct trademark from durable_performance
+    </select>
+    <select id="select_heatTreatmentSystem" resultType="String">
+        select distinct heat_treatment_system from durable_performance
+    </select>
+    <select id="select_durable_performance" resultMap="DurablePerformanceResult">
+        select trademark,heat_treatment_system,temperature,stress,τ_min,τ_max,elongation,section_shrinkage
+        from durable_performance
+        where trademark=#{trademark}
+          and heat_treatment_system=#{heat_treatment_system}
+          and (temperature>#{temperature_min} or temperature=#{temperature_min}) and (#{temperature_max}>temperature or temperature=#{temperature_max})
+          and (stress>#{stress_min} or stress=#{stress_min}) and (#{stress_max}>stress or stress=#{stress_max})
+
+    </select>
+
+    <select id="select_temperature_max" resultType="java.lang.Long">
+        select max(temperature)
+        from durable_performance
+        limit 1
+    </select>
+    <select id="select_temperature_min" resultType="java.lang.Long">
+        select min(temperature)
+        from durable_performance
+        limit 1
+    </select>
+    <select id="select_stress_max" resultType="java.lang.Long">
+        select max(stress)
+        from durable_performance
+        limit 1
+    </select>
+    <select id="select_stress_min" resultType="java.lang.Long">
+        select min(stress)
+        from durable_performance
+        limit 1
+    </select>
+</mapper>

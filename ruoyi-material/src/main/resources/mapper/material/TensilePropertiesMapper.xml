@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.material.mapper.TensilePropertiesMapper">
+    
+    <resultMap type="TensileProperties" id="TensilePropertiesResult">
+        <result property="trademark"    column="trademark"    />
+        <result property="heatTreatmentSystem"    column="heat_treatment_system"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="yieldStrength"    column="yield_strength"    />
+        <result property="tensileStrength"    column="tensile_strength"    />
+        <result property="elongation"    column="elongation"    />
+        <result property="sectionShrinkage"    column="section_shrinkage"    />
+    </resultMap>
+
+    <sql id="selectTensilePropertiesVo">
+        select trademark, heat_treatment_system, temperature, yield_strength, tensile_strength, elongation, section_shrinkage from tensile_properties
+    </sql>
+
+    <select id="selectTensilePropertiesList" parameterType="TensileProperties" resultMap="TensilePropertiesResult">
+        <include refid="selectTensilePropertiesVo"/>
+        <where>  
+            <if test="trademark != null  and trademark != ''"> and trademark = #{trademark}</if>
+            <if test="heatTreatmentSystem != null  and heatTreatmentSystem != ''"> and heat_treatment_system = #{heatTreatmentSystem}</if>
+            <if test="temperature != null "> and temperature = #{temperature}</if>
+            <if test="yieldStrength != null "> and yield_strength = #{yieldStrength}</if>
+            <if test="tensileStrength != null "> and tensile_strength = #{tensileStrength}</if>
+            <if test="elongation != null "> and elongation = #{elongation}</if>
+            <if test="sectionShrinkage != null "> and section_shrinkage = #{sectionShrinkage}</if>
+        </where>
+    </select>
+    
+    <select id="selectTensilePropertiesByTrademark" parameterType="String" resultMap="TensilePropertiesResult">
+        <include refid="selectTensilePropertiesVo"/>
+        where trademark = #{trademark}
+    </select>
+        
+    <insert id="insertTensileProperties" parameterType="TensileProperties">
+        insert into tensile_properties
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="trademark != null">trademark,</if>
+            <if test="heatTreatmentSystem != null">heat_treatment_system,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="yieldStrength != null">yield_strength,</if>
+            <if test="tensileStrength != null">tensile_strength,</if>
+            <if test="elongation != null">elongation,</if>
+            <if test="sectionShrinkage != null">section_shrinkage,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="trademark != null">#{trademark},</if>
+            <if test="heatTreatmentSystem != null">#{heatTreatmentSystem},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="yieldStrength != null">#{yieldStrength},</if>
+            <if test="tensileStrength != null">#{tensileStrength},</if>
+            <if test="elongation != null">#{elongation},</if>
+            <if test="sectionShrinkage != null">#{sectionShrinkage},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTensileProperties" parameterType="TensileProperties">
+        update tensile_properties
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="heatTreatmentSystem != null">heat_treatment_system = #{heatTreatmentSystem},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="yieldStrength != null">yield_strength = #{yieldStrength},</if>
+            <if test="tensileStrength != null">tensile_strength = #{tensileStrength},</if>
+            <if test="elongation != null">elongation = #{elongation},</if>
+            <if test="sectionShrinkage != null">section_shrinkage = #{sectionShrinkage},</if>
+        </trim>
+        where trademark = #{trademark}
+    </update>
+
+    <delete id="deleteTensilePropertiesByTrademark" parameterType="String">
+        delete from tensile_properties where trademark = #{trademark}
+    </delete>
+
+    <delete id="deleteTensilePropertiesByTrademarks" parameterType="String">
+        delete from tensile_properties where trademark in 
+        <foreach item="trademark" collection="array" open="(" separator="," close=")">
+            #{trademark}
+        </foreach>
+    </delete>
+
+    <!--@Author 刘洋-->
+    <select id="select_trademark" resultType="String">
+        select distinct trademark from tensile_properties
+    </select>
+    <select id="select_heatTreatmentSystem" resultType="String">
+        select distinct heat_treatment_system from tensile_properties
+    </select>
+    <select id="select_tensile_properties" resultMap="TensilePropertiesResult">
+        select trademark,heat_treatment_system,temperature,yield_strength,tensile_strength,elongation,section_shrinkage
+        from tensile_properties
+        where trademark=#{trademark}
+              and heat_treatment_system=#{heat_treatment_system}
+              and (temperature>#{temperature_min} or temperature=#{temperature_min}) and (#{temperature_max}>temperature or temperature=#{temperature_max})
+    </select>
+
+    <select id="select_temperature_max" resultType="java.lang.Long">
+        select max(temperature)
+        from tensile_properties
+        limit 1
+    </select>
+    <select id="select_temperature_min" resultType="java.lang.Long">
+        select min(temperature)
+        from tensile_properties
+        limit 1
+    </select>
+    
+</mapper>

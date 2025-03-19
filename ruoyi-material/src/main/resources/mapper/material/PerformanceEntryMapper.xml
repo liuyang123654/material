@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.material.mapper.PerformanceEntryMapper">
+    
+    <resultMap type="PerformanceEntry" id="PerformanceEntryResult">
+        <result property="trademark"    column="trademark"    />
+        <result property="cMin"    column="C_min"    />
+        <result property="cMax"    column="C_max"    />
+        <result property="crMin"    column="Cr_min"    />
+        <result property="crMax"    column="Cr_max"    />
+        <result property="niMin"    column="Ni_min"    />
+        <result property="niMax"    column="Ni_max"    />
+        <result property="wMin"    column="W_min"    />
+        <result property="wMax"    column="W_max"    />
+        <result property="alMin"    column="Al_min"    />
+        <result property="alMax"    column="Al_max"    />
+        <result property="tiMin"    column="Ti_min"    />
+        <result property="tiMax"    column="Ti_max"    />
+        <result property="moMin"    column="Mo_min"    />
+        <result property="moMax"    column="Mo_max"    />
+        <result property="coMin"    column="Co_min"    />
+        <result property="coMax"    column="Co_max"    />
+        <result property="feMin"    column="Fe_min"    />
+        <result property="feMax"    column="Fe_max"    />
+        <result property="nbMin"    column="Nb_min"    />
+        <result property="nbMax"    column="Nb_max"    />
+        <result property="taMin"    column="Ta_min"    />
+        <result property="taMax"    column="Ta_max"    />
+        <result property="hfMin"    column="Hf_min"    />
+        <result property="hfMax"    column="Hf_max"    />
+        <result property="bMin"    column="B_min"    />
+        <result property="bMax"    column="B_max"    />
+        <result property="zrMin"    column="Zr_min"    />
+        <result property="zrMax"    column="Zr_max"    />
+        <result property="tMin"    column="T_min"    />
+        <result property="tMax"    column="T_max"    />
+        <result property="density"    column="ρ"    />
+        <result property="standardHeatTreatmentSystem"    column="standard_heat_treatment_system"    />
+    </resultMap>
+
+    <sql id="selectPerformanceEntryVo">
+        select trademark, C_min, C_max, Cr_min, Cr_max, Ni_min, Ni_max, W_min, W_max, Al_min, Al_max, Ti_min, Ti_max, Mo_min, Mo_max, Co_min, Co_max, Fe_min, Fe_max, Nb_min, Nb_max, Ta_min, Ta_max, Hf_min, Hf_max, B_min, B_max, Zr_min, Zr_max, T_min, T_max, ρ, standard_heat_treatment_system from performance_entry
+    </sql>
+
+    <select id="selectPerformanceEntryList" parameterType="PerformanceEntry" resultMap="PerformanceEntryResult">
+        <include refid="selectPerformanceEntryVo"/>
+        <where>  
+            <if test="trademark != null  and trademark != ''"> and trademark = #{trademark}</if>
+            <if test="cMin != null "> and C_min = #{cMin}</if>
+            <if test="cMax != null "> and C_max = #{cMax}</if>
+            <if test="crMin != null "> and Cr_min = #{crMin}</if>
+            <if test="crMax != null "> and Cr_max = #{crMax}</if>
+            <if test="niMin != null "> and Ni_min = #{niMin}</if>
+            <if test="niMax != null "> and Ni_max = #{niMax}</if>
+            <if test="wMin != null "> and W_min = #{wMin}</if>
+            <if test="wMax != null "> and W_max = #{wMax}</if>
+            <if test="alMin != null "> and Al_min = #{alMin}</if>
+            <if test="alMax != null "> and Al_max = #{alMax}</if>
+            <if test="tiMin != null "> and Ti_min = #{tiMin}</if>
+            <if test="tiMax != null "> and Ti_max = #{tiMax}</if>
+            <if test="moMin != null "> and Mo_min = #{moMin}</if>
+            <if test="moMax != null "> and Mo_max = #{moMax}</if>
+            <if test="coMin != null "> and Co_min = #{coMin}</if>
+            <if test="coMax != null "> and Co_max = #{coMax}</if>
+            <if test="feMin != null "> and Fe_min = #{feMin}</if>
+            <if test="feMax != null "> and Fe_max = #{feMax}</if>
+            <if test="nbMin != null "> and Nb_min = #{nbMin}</if>
+            <if test="nbMax != null "> and Nb_max = #{nbMax}</if>
+            <if test="taMin != null "> and Ta_min = #{taMin}</if>
+            <if test="taMax != null "> and Ta_max = #{taMax}</if>
+            <if test="hfMin != null "> and Hf_min = #{hfMin}</if>
+            <if test="hfMax != null "> and Hf_max = #{hfMax}</if>
+            <if test="bMin != null "> and B_min = #{bMin}</if>
+            <if test="bMax != null "> and B_max = #{bMax}</if>
+            <if test="zrMin != null "> and Zr_min = #{zrMin}</if>
+            <if test="zrMax != null "> and Zr_max = #{zrMax}</if>
+            <if test="tMin != null "> and T_min = #{tMin}</if>
+            <if test="tMax != null "> and T_max = #{tMax}</if>
+            <if test="ρ != null "> and ρ = #{ρ}</if>
+            <if test="standardHeatTreatmentSystem != null  and standardHeatTreatmentSystem != ''"> and standard_heat_treatment_system = #{standardHeatTreatmentSystem}</if>
+        </where>
+    </select>
+    
+    <select id="selectPerformanceEntryByTrademark" parameterType="String" resultMap="PerformanceEntryResult">
+        <include refid="selectPerformanceEntryVo"/>
+        where trademark = #{trademark}
+    </select>
+        
+    <insert id="insertPerformanceEntry" parameterType="PerformanceEntry">
+        insert into performance_entry
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="trademark != null and trademark != ''">trademark,</if>
+            <if test="cMin != null">C_min,</if>
+            <if test="cMax != null">C_max,</if>
+            <if test="crMin != null">Cr_min,</if>
+            <if test="crMax != null">Cr_max,</if>
+            <if test="niMin != null">Ni_min,</if>
+            <if test="niMax != null">Ni_max,</if>
+            <if test="wMin != null">W_min,</if>
+            <if test="wMax != null">W_max,</if>
+            <if test="alMin != null">Al_min,</if>
+            <if test="alMax != null">Al_max,</if>
+            <if test="tiMin != null">Ti_min,</if>
+            <if test="tiMax != null">Ti_max,</if>
+            <if test="moMin != null">Mo_min,</if>
+            <if test="moMax != null">Mo_max,</if>
+            <if test="coMin != null">Co_min,</if>
+            <if test="coMax != null">Co_max,</if>
+            <if test="feMin != null">Fe_min,</if>
+            <if test="feMax != null">Fe_max,</if>
+            <if test="nbMin != null">Nb_min,</if>
+            <if test="nbMax != null">Nb_max,</if>
+            <if test="taMin != null">Ta_min,</if>
+            <if test="taMax != null">Ta_max,</if>
+            <if test="hfMin != null">Hf_min,</if>
+            <if test="hfMax != null">Hf_max,</if>
+            <if test="bMin != null">B_min,</if>
+            <if test="bMax != null">B_max,</if>
+            <if test="zrMin != null">Zr_min,</if>
+            <if test="zrMax != null">Zr_max,</if>
+            <if test="tMin != null">T_min,</if>
+            <if test="tMax != null">T_max,</if>
+            <if test="ρ != null">ρ,</if>
+            <if test="standardHeatTreatmentSystem != null">standard_heat_treatment_system,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="trademark != null and trademark != ''">#{trademark},</if>
+            <if test="cMin != null">#{cMin},</if>
+            <if test="cMax != null">#{cMax},</if>
+            <if test="crMin != null">#{crMin},</if>
+            <if test="crMax != null">#{crMax},</if>
+            <if test="niMin != null">#{niMin},</if>
+            <if test="niMax != null">#{niMax},</if>
+            <if test="wMin != null">#{wMin},</if>
+            <if test="wMax != null">#{wMax},</if>
+            <if test="alMin != null">#{alMin},</if>
+            <if test="alMax != null">#{alMax},</if>
+            <if test="tiMin != null">#{tiMin},</if>
+            <if test="tiMax != null">#{tiMax},</if>
+            <if test="moMin != null">#{moMin},</if>
+            <if test="moMax != null">#{moMax},</if>
+            <if test="coMin != null">#{coMin},</if>
+            <if test="coMax != null">#{coMax},</if>
+            <if test="feMin != null">#{feMin},</if>
+            <if test="feMax != null">#{feMax},</if>
+            <if test="nbMin != null">#{nbMin},</if>
+            <if test="nbMax != null">#{nbMax},</if>
+            <if test="taMin != null">#{taMin},</if>
+            <if test="taMax != null">#{taMax},</if>
+            <if test="hfMin != null">#{hfMin},</if>
+            <if test="hfMax != null">#{hfMax},</if>
+            <if test="bMin != null">#{bMin},</if>
+            <if test="bMax != null">#{bMax},</if>
+            <if test="zrMin != null">#{zrMin},</if>
+            <if test="zrMax != null">#{zrMax},</if>
+            <if test="tMin != null">#{tMin},</if>
+            <if test="tMax != null">#{tMax},</if>
+            <if test="ρ != null">#{ρ},</if>
+            <if test="standardHeatTreatmentSystem != null">#{standardHeatTreatmentSystem},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePerformanceEntry" parameterType="PerformanceEntry">
+        update performance_entry
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cMin != null">C_min = #{cMin},</if>
+            <if test="cMax != null">C_max = #{cMax},</if>
+            <if test="crMin != null">Cr_min = #{crMin},</if>
+            <if test="crMax != null">Cr_max = #{crMax},</if>
+            <if test="niMin != null">Ni_min = #{niMin},</if>
+            <if test="niMax != null">Ni_max = #{niMax},</if>
+            <if test="wMin != null">W_min = #{wMin},</if>
+            <if test="wMax != null">W_max = #{wMax},</if>
+            <if test="alMin != null">Al_min = #{alMin},</if>
+            <if test="alMax != null">Al_max = #{alMax},</if>
+            <if test="tiMin != null">Ti_min = #{tiMin},</if>
+            <if test="tiMax != null">Ti_max = #{tiMax},</if>
+            <if test="moMin != null">Mo_min = #{moMin},</if>
+            <if test="moMax != null">Mo_max = #{moMax},</if>
+            <if test="coMin != null">Co_min = #{coMin},</if>
+            <if test="coMax != null">Co_max = #{coMax},</if>
+            <if test="feMin != null">Fe_min = #{feMin},</if>
+            <if test="feMax != null">Fe_max = #{feMax},</if>
+            <if test="nbMin != null">Nb_min = #{nbMin},</if>
+            <if test="nbMax != null">Nb_max = #{nbMax},</if>
+            <if test="taMin != null">Ta_min = #{taMin},</if>
+            <if test="taMax != null">Ta_max = #{taMax},</if>
+            <if test="hfMin != null">Hf_min = #{hfMin},</if>
+            <if test="hfMax != null">Hf_max = #{hfMax},</if>
+            <if test="bMin != null">B_min = #{bMin},</if>
+            <if test="bMax != null">B_max = #{bMax},</if>
+            <if test="zrMin != null">Zr_min = #{zrMin},</if>
+            <if test="zrMax != null">Zr_max = #{zrMax},</if>
+            <if test="tMin != null">T_min = #{tMin},</if>
+            <if test="tMax != null">T_max = #{tMax},</if>
+            <if test="ρ != null">ρ = #{ρ},</if>
+            <if test="standardHeatTreatmentSystem != null">standard_heat_treatment_system = #{standardHeatTreatmentSystem},</if>
+        </trim>
+        where trademark = #{trademark}
+    </update>
+
+    <delete id="deletePerformanceEntryByTrademark" parameterType="String">
+        delete from performance_entry where trademark = #{trademark}
+    </delete>
+
+    <delete id="deletePerformanceEntryByTrademarks" parameterType="String">
+        delete from performance_entry where trademark in 
+        <foreach item="trademark" collection="array" open="(" separator="," close=")">
+            #{trademark}
+        </foreach>
+    </delete>
+
+
+    <!--@Date 2023/6/8-->
+    <!--查询温度最小-->
+    <select id="select_min" resultType="String">
+        select min(T_min) from performance_entry
+    </select>
+    <!--查询温度最大-->
+    <select id="select_max" resultType="String">
+        select max(T_max) from performance_entry
+    </select>
+     <!--查询牌号-->
+    <select id="select_trademark" resultType="String">
+        select distinct trademark from performance_entry
+    </select>
+    <!--查询所有-->
+    <select id="select_performance_entry" resultMap="PerformanceEntryResult">
+        select *
+        from performance_entry where trademark=#{trademark}
+                               and (#{T}>T_min or #{T}=T_min)
+                               and (T_max>#{T} or T_max=#{T})
+    </select>
+
+</mapper>

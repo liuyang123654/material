@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.material.mapper.PointMapper">
+    <select id="if_table_exist" resultType="String">
+        show tables like #{tablename}
+    </select>
+    <resultMap type="com.ruoyi.material.domain.Ten_Mentals_Value" id="Ten_Mentals_Value_Result">
+        <result property="Al"    column="Al"    />
+        <result property="Ti"    column="Ti"    />
+        <result property="Cr"    column="Cr"    />
+        <result property="Co"    column="Co"    />
+        <result property="Ni"    column="Ni"    />
+        <result property="Nb"    column="Nb"    />
+        <result property="Mo"    column="Mo"    />
+        <result property="Hf"    column="Hf"    />
+        <result property="Ta"    column="Ta"    />
+        <result property="W"    column="W"    />
+    </resultMap>
+    <select id="select_all" resultMap="Ten_Mentals_Value_Result">
+        select Al,Ti,Cr,Co,Ni,Nb,Mo,Hf,Ta,W from ${table_name1}
+    </select>
+    <select id="select_xy" resultType="String">
+        select concat(x,'_',y) from ${table_name1}
+        where  #{Al}=Al
+          and (#{Ti}=Ti)
+          and (#{Cr}=Cr)
+          and (#{Co}=Co)
+          and (#{Ni}=Ni)
+          and (#{Nb}=Nb)
+          and (#{Mo}=Mo)
+          and (#{Ta}=Ta)
+          and (#{W}=W)
+          limit 1
+    </select>
+    <select id="select_hv" resultType="java.lang.String">
+        select hv from ${table_name2}
+        where  X=#{X} and Y=#{Y}
+limit 1
+    </select>
+
+    <select id="select_attribute" resultMap="Ten_Mentals_Value_Result">
+        select Al,Ti,Cr,Co,Ni,Nb,Mo,Hf,Ta,W from ${tablename}
+        where attribute=#{attribute}
+    </select>
+    <resultMap type="com.ruoyi.material.domain.ten_max_min" id="ten_max_min_result">
+        <result property="max_al" column="max_al"    />
+        <result property="max_ti" column="max_ti"    />
+        <result property="max_cr" column="max_cr"    />
+        <result property="max_co" column="max_co"    />
+        <result property="max_ni" column="max_ni"    />
+        <result property="max_nb" column="max_nb"    />
+        <result property="max_mo" column="max_mo"    />
+        <result property="max_hf" column="max_hf"    />
+        <result property="max_ta" column="max_ta"    />
+        <result property="max_w" column="max_w"    />
+    </resultMap>
+
+    <select id="select_limit" resultMap="ten_max_min_result">
+        select MAX(Al) max_al,MIN(Al) min_al,
+               MAX(Ti) max_ti,MIN(Ti) min_ti,
+               MAX(Cr) max_cr,MIN(Cr) min_cr,
+               MAX(Co) max_co,MIN(Co) min_co,
+               MAX(Ni) max_ni,MIN(Ni) min_ni,
+               MAX(Nb) max_nb,MIN(Nb) min_nb,
+               MAX(Mo) max_mo,MIN(Mo) min_mo,
+               MAX(Hf) max_hf,MIN(Hf) min_hf,
+               MAX(Ta) max_ta,MIN(Ta) min_ta,
+               MAX(W) max_w,MIN(W) min_w
+        from ${tablename};
+    </select>
+</mapper>
+ 

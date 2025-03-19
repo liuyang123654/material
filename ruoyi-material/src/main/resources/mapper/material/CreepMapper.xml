@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.material.mapper.CreepMapper">
+    
+    <resultMap type="Creep" id="CreepResult">
+        <result property="trademark"    column="trademark"    />
+        <result property="heatTreatmentSystem"    column="heat_treatment_system"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="time"    column="time"    />
+        <result property="stress"    column="stress"    />
+        <result property="εt_min"    column="εt_min"    />
+        <result property="εt_max"    column="εt_max"    />
+        <result property="εp_min"    column="εp_min"    />
+        <result property="εp_max"    column="εp_max"    />
+        <result property="εe_min"    column="εe_min"    />
+        <result property="εe_max"    column="εe_max"    />
+    </resultMap>
+
+    <sql id="selectCreepVo">
+        select trademark, heat_treatment_system, temperature, time, stress, εt_min, εt_max, εp_min, εp_max, εe_min, εe_max from creep
+    </sql>
+
+    <select id="selectCreepList" parameterType="Creep" resultMap="CreepResult">
+        <include refid="selectCreepVo"/>
+        <where>  
+            <if test="trademark != null  and trademark != ''"> and trademark = #{trademark}</if>
+            <if test="heatTreatmentSystem != null  and heatTreatmentSystem != ''"> and heat_treatment_system = #{heatTreatmentSystem}</if>
+            <if test="temperature != null "> and temperature = #{temperature}</if>
+            <if test="time != null "> and time = #{time}</if>
+            <if test="stress != null "> and stress = #{stress}</if>
+            <if test="εt_min != null "> and εt_min = #{εt_min}</if>
+            <if test="εt_max != null "> and εt_max = #{εt_max}</if>
+            <if test="εp_min != null "> and εp_min = #{εp_min}</if>
+            <if test="εp_max != null "> and εp_max = #{εp_max}</if>
+            <if test="εe_min != null "> and εe_min = #{εe_min}</if>
+            <if test="εe_max != null "> and εe_max = #{εe_max}</if>
+        </where>
+    </select>
+    
+    <select id="selectCreepByTrademark" parameterType="String" resultMap="CreepResult">
+        <include refid="selectCreepVo"/>
+        where trademark = #{trademark}
+    </select>
+        
+    <insert id="insertCreep" parameterType="Creep">
+        insert into creep
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="trademark != null">trademark,</if>
+            <if test="heatTreatmentSystem != null">heat_treatment_system,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="time != null">time,</if>
+            <if test="stress != null">stress,</if>
+            <if test="εt_min != null">εt_min,</if>
+            <if test="εt_max != null">εt_max,</if>
+            <if test="εp_min != null">εp_min,</if>
+            <if test="εp_max != null">εp_max,</if>
+            <if test="εe_min != null">εe_min,</if>
+            <if test="εe_max != null">εe_max,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="trademark != null">#{trademark},</if>
+            <if test="heatTreatmentSystem != null">#{heatTreatmentSystem},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="time != null">#{time},</if>
+            <if test="stress != null">#{stress},</if>
+            <if test="εt_min != null">#{εt_min},</if>
+            <if test="εt_max != null">#{εt_max},</if>
+            <if test="εp_min != null">#{εp_min},</if>
+            <if test="εp_max != null">#{εp_max},</if>
+            <if test="εe_min != null">#{εe_min},</if>
+            <if test="εe_max != null">#{εe_max},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCreep" parameterType="Creep">
+        update creep
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="heatTreatmentSystem != null">heat_treatment_system = #{heatTreatmentSystem},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="stress != null">stress = #{stress},</if>
+            <if test="εt_min != null">εt_min = #{εt_min},</if>
+            <if test="εt_max != null">εt_max = #{εt_max},</if>
+            <if test="εp_min != null">εp_min = #{εp_min},</if>
+            <if test="εp_max != null">εp_max = #{εp_max},</if>
+            <if test="εe_min != null">εe_min = #{εe_min},</if>
+            <if test="εe_max != null">εe_max = #{εe_max},</if>
+        </trim>
+        where trademark = #{trademark}
+    </update>
+
+    <delete id="deleteCreepByTrademark" parameterType="String">
+        delete from creep where trademark = #{trademark}
+    </delete>
+
+    <delete id="deleteCreepByTrademarks" parameterType="String">
+        delete from creep where trademark in 
+        <foreach item="trademark" collection="array" open="(" separator="," close=")">
+            #{trademark}
+        </foreach>
+    </delete>
+
+    <!--@Author 刘洋-->
+    <select id="select_trademark" resultType="String">
+        select distinct trademark from creep
+    </select>
+    <select id="select_heatTreatmentSystem" resultType="String">
+        select distinct heat_treatment_system from creep
+    </select>
+    <select id="select_creep" resultMap="CreepResult">
+        select trademark,heat_treatment_system,temperature,time,stress,εt_min,εt_max,εp_min,εp_max,εe_min,εe_max
+        from creep
+        where trademark=#{trademark}
+          and heat_treatment_system=#{heat_treatment_system}
+          and (temperature>#{temperature_min} or temperature=#{temperature_min}) and (#{temperature_max}>temperature or temperature=#{temperature_max})
+          and (time>#{time_min} or time=#{time_min}) and (#{time_max}>time or time=#{time_max})
+          and (stress>#{stress_min} or stress=#{stress_min}) and (#{stress_max}>stress or stress=#{stress_max})
+
+    </select>
+    <select id="select_temperature_max" resultType="java.lang.Long">
+        select max(temperature)
+        from creep
+        limit 1
+    </select>
+    <select id="select_temperature_min" resultType="java.lang.Long">
+        select min(temperature)
+        from creep
+        limit 1
+    </select>
+    <select id="select_time_max" resultType="java.lang.Long">
+        select max(time)
+        from creep
+        limit 1
+    </select>
+    <select id="select_time_min" resultType="java.lang.Long">
+        select min(time)
+        from creep
+        limit 1
+    </select>
+    <select id="select_stress_max" resultType="java.lang.Long">
+        select max(stress)
+        from creep
+        limit 1
+    </select>
+    <select id="select_stress_min" resultType="java.lang.Long">
+        select min(stress)
+        from creep
+        limit 1
+    </select>
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.material.mapper.EnduringLimitsMapper">
+    
+    <resultMap type="EnduringLimits" id="EnduringLimitsResult">
+        <result property="trademark"    column="trademark"    />
+        <result property="heatTreatmentSystem"    column="heat_treatment_system"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="time"    column="time"    />
+        <result property="enduringLimits"    column="enduring_limits"    />
+    </resultMap>
+
+    <sql id="selectEnduringLimitsVo">
+        select trademark, heat_treatment_system, temperature, time, enduring_limits from enduring_limits
+    </sql>
+
+    <select id="selectEnduringLimitsList" parameterType="EnduringLimits" resultMap="EnduringLimitsResult">
+        <include refid="selectEnduringLimitsVo"/>
+        <where>  
+            <if test="trademark != null  and trademark != ''"> and trademark = #{trademark}</if>
+            <if test="heatTreatmentSystem != null  and heatTreatmentSystem != ''"> and heat_treatment_system = #{heatTreatmentSystem}</if>
+            <if test="temperature != null "> and temperature = #{temperature}</if>
+            <if test="time != null "> and time = #{time}</if>
+            <if test="enduringLimits != null "> and enduring_limits = #{enduringLimits}</if>
+        </where>
+    </select>
+    
+    <select id="selectEnduringLimitsByTrademark" parameterType="String" resultMap="EnduringLimitsResult">
+        <include refid="selectEnduringLimitsVo"/>
+        where trademark = #{trademark}
+    </select>
+        
+    <insert id="insertEnduringLimits" parameterType="EnduringLimits">
+        insert into enduring_limits
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="trademark != null">trademark,</if>
+            <if test="heatTreatmentSystem != null">heat_treatment_system,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="time != null">time,</if>
+            <if test="enduringLimits != null">enduring_limits,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="trademark != null">#{trademark},</if>
+            <if test="heatTreatmentSystem != null">#{heatTreatmentSystem},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="time != null">#{time},</if>
+            <if test="enduringLimits != null">#{enduringLimits},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEnduringLimits" parameterType="EnduringLimits">
+        update enduring_limits
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="heatTreatmentSystem != null">heat_treatment_system = #{heatTreatmentSystem},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="enduringLimits != null">enduring_limits = #{enduringLimits},</if>
+        </trim>
+        where trademark = #{trademark}
+    </update>
+
+    <delete id="deleteEnduringLimitsByTrademark" parameterType="String">
+        delete from enduring_limits where trademark = #{trademark}
+    </delete>
+
+    <delete id="deleteEnduringLimitsByTrademarks" parameterType="String">
+        delete from enduring_limits where trademark in 
+        <foreach item="trademark" collection="array" open="(" separator="," close=")">
+            #{trademark}
+        </foreach>
+    </delete>
+
+    <!--@Author 刘洋-->
+    <select id="select_trademark" resultType="String">
+        select distinct trademark from enduring_limits
+    </select>
+    <select id="select_heatTreatmentSystem" resultType="String">
+        select distinct heat_treatment_system from enduring_limits
+    </select>
+    <select id="select_enduring_limits" resultMap="EnduringLimitsResult">
+        select trademark,heat_treatment_system,temperature,time,enduring_limits
+        from enduring_limits
+        where trademark=#{trademark}
+          and heat_treatment_system=#{heat_treatment_system}
+          and (temperature>#{temperature_min} or temperature=#{temperature_min}) and (#{temperature_max}>temperature or temperature=#{temperature_max})
+          and (time>#{time_min} or time=#{time_min}) and (#{time_max}>time or time=#{time_max})
+    </select>
+    <select id="select_temperature_max" resultType="java.lang.Long">
+        select max(temperature)
+        from enduring_limits
+        limit 1
+    </select>
+    <select id="select_temperature_min" resultType="java.lang.Long">
+        select min(temperature)
+        from enduring_limits
+        limit 1
+    </select>
+    <select id="select_time_max" resultType="java.lang.Long">
+        select max(time)
+        from enduring_limits
+        limit 1
+    </select>
+    <select id="select_time_min" resultType="java.lang.Long">
+        select min(time)
+        from enduring_limits
+        limit 1
+    </select>
+</mapper>

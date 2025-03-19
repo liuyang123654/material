@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.material.mapper.PaperMapper">
+    <resultMap id="paper_result" type="com.ruoyi.material.domain.Paper">
+        <result property="name" column="name" />
+        <result property="id"   column="id"/>
+        <result property="author" column="author"/>
+        <result property="content" column="content"/>
+    </resultMap>
+    <select id="select_paperlist" resultMap="paper_result">
+        select name,id,author from paper
+    </select>
+    <select id="select_paper_content" resultType="String">
+        select content from paper where id=#{id}
+    </select>
+</mapper>
+ 
